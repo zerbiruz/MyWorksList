@@ -52,7 +52,7 @@ class HomeFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.theera_palajare -> {
-                viewModel.employeeName.value = "Theera"
+                viewModel.employeeName.value = "ธีระ"
                 true
             }
             R.id.piyachat_lothaisong -> {
