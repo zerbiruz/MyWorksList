@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/pr_menu"
+        android:title="pr" />
+
+    <item android:id="@+id/sr_menu"
+        android:title="sr" />
+
+    <item android:id="@+id/eimp_menu"
+        android:title="eimp" />
+
+    <item android:id="@+id/evaluation_menu"
+        android:title="ประเมินผลโครงการ" />
+
+    <item android:id="@+id/all_project_menu"
+        android:title="All projects" />
+
+</menu>

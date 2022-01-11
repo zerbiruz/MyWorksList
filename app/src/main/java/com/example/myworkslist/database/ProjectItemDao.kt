@@ -14,4 +14,7 @@ interface ProjectItemDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(projects: List<ProjectItem>)
+
+    @Query("select * from projectitem where projectType = :key")
+    fun getProjectWithFilter(key: String): LiveData<List<ProjectItem>>
 }

@@ -1,15 +1,13 @@
 package com.example.myworkslist.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.myworkslist.R
 import com.example.myworkslist.databinding.FragmentHomeBinding
-import timber.log.Timber
+import com.google.android.material.snackbar.Snackbar
 
 
 class HomeFragment : Fragment() {
@@ -17,6 +15,7 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
     private lateinit var viewModelFactory: HomeViewModelFactory
+    private lateinit var adapter: ProjectItemAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,7 +29,7 @@ class HomeFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
-        val adapter = ProjectItemAdapter()
+        adapter = ProjectItemAdapter()
         binding.projectList.adapter = adapter
 
         viewModel.projectItemResults.observe(viewLifecycleOwner, Observer {
@@ -46,20 +45,42 @@ class HomeFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.employees_name_menu, menu)
+        inflater.inflate(R.menu.project_type_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.theera_palajare -> {
-                viewModel.employeeName.value = "ธีระ"
-                true
+        when (item.itemId) {
+            R.id.pr_menu -> {
+                viewModel.updateDataWithFilter("pr")
+                viewModel.projectItemResults.observe(viewLifecycleOwner, Observer {
+                    adapter.submitList(it)
+                })
             }
-            R.id.piyachat_lothaisong -> {
-                viewModel.employeeName.value = "Piyachat"
-                true
+            R.id.sr_menu -> {
+                viewModel.updateDataWithFilter("sr")
+                viewModel.projectItemResults.observe(viewLifecycleOwner, Observer {
+                    adapter.submitList(it)
+                })
             }
-            else -> super.onOptionsItemSelected(item)
+            R.id.eimp_menu -> {
+                viewModel.updateDataWithFilter("eimp")
+                viewModel.projectItemResults.observe(viewLifecycleOwner, Observer {
+                    adapter.submitList(it)
+                })
+            }
+            R.id.evaluation_menu -> {
+                viewModel.updateDataWithFilter("งานประเมินผลโครงการ")
+                viewModel.projectItemResults.observe(viewLifecycleOwner, Observer {
+                    adapter.submitList(it)
+                })
+            }
+            R.id.all_project_menu -> {
+                viewModel.getAllProjects()
+                viewModel.projectItemResults.observe(viewLifecycleOwner, Observer {
+                    adapter.submitList(it)
+                })
+            }
         }
+        return true
     }
 }

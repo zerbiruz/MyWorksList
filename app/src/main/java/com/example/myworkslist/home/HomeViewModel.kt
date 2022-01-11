@@ -1,12 +1,14 @@
 package com.example.myworkslist.home
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.myworkslist.api.ProjectItem
 import com.example.myworkslist.database.ProjectItemDatabase
 import com.example.myworkslist.repository.ProjectRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.IOException
 
 
@@ -22,10 +24,17 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     private val projectsRepository = ProjectRepository(ProjectItemDatabase.getDatabase(application))
 
-    var projectItemResults: LiveData<List<ProjectItem>> = projectsRepository.projects
+//    private val _projectItemResults = MutableLiveData<List<ProjectItem>>()
+//    val projectItemResults: LiveData<List<ProjectItem>>
+//        get() = _projectItemResults
+    lateinit var projectItemResults: LiveData<List<ProjectItem>>
 
     init {
         refreshDataFromRepository()
+        viewModelScope.launch {
+            projectItemResults = projectsRepository.getData()
+//            projectItemResults = projectsRepository.getDataWithFilter("sr")
+        }
     }
 
     private fun refreshDataFromRepository() {
@@ -37,6 +46,18 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             } catch (networkError: IOException) {
                 _status.value = ApiStatus.ERROR
             }
+        }
+    }
+
+    fun updateDataWithFilter(filter: String) {
+        viewModelScope.launch {
+            projectItemResults = projectsRepository.getDataWithFilter(filter)
+        }
+    }
+
+    fun getAllProjects() {
+        viewModelScope.launch {
+            projectItemResults = projectsRepository.getData()
         }
     }
 }
